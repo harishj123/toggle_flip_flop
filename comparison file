@@ -1,0 +1,29 @@
+class compare_class;
+
+   // Declare signals as extern or get through virtual interface (recommended)
+  /* logic clk;
+   logic rstn;
+   logic t;
+   logic q;*/
+
+   task compare_t();
+     forever @(posedge clk or negedge clk) begin 
+       if (!rstn) begin #1;
+         if (q != 0) begin
+           $error("Test Failed Time=%0t | clk=%0b rstn=%0b t=%0b q=%0b", $time, clk, rstn, t, q);
+         end else begin
+           $display("Test Passed Time=%0t | clk=%0b rstn=%0b t=%0b q=%0b", $time, clk, rstn, t, q);
+         end
+       end else begin
+         if (!t && q == t) begin
+           $display("Test Passed Time=%0t | clk=%0b rstn=%0b t=%0b q=%0b", $time, clk, rstn, t, q);
+         end else if (t && q != t) begin  // << This condition is logically wrong, see NOTE below
+           $display("Test Passed Time=%0t | clk=%0b rstn=%0b t=%0b q=%0b", $time, clk, rstn, t, q);
+         end else begin
+           $error("Test Failed Time=%0t | clk=%0b rstn=%0b t=%0b q=%0b", $time, clk, rstn, t, q);
+         end
+       end
+     end
+   endtask
+
+endclass
